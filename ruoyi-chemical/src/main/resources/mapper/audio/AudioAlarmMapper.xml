@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chemical.mapper.AudioAlarmMapper">
+
+    <resultMap type="AudioAlarm" id="AudioAlarmResult">
+        <result property="alarmId"    column="alarm_id" />
+        <result property="deviceCode"    column="device_code" />
+        <result property="schoolName"    column="school_name" />
+        <result property="location"    column="location" />
+        <result property="manager"    column="manager" />
+        <result property="alarmLevel"    column="alarm_level" />
+        <result property="alarmTime"    column="alarm_time" />
+        <result property="createTime"    column="create_time" />
+<!--        <result property="createBy"    column="create_by" />-->
+<!--        <result property="updateBy"    column="update_by" />-->
+        <result property="updateTime"    column="update_time" />
+<!--        <result property="remark"    column="remark" />-->
+        <result property="userName"    column="user_name" />
+        <result property="eventId"    column="event_id" />
+        <result property="audioUrl"    column="audio_url" />
+        <result property="intercomUrl"    column="intercom_url" />
+        <result property="devIdentity"    column="dev_identity" />
+
+    </resultMap>
+
+</mapper>

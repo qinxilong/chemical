@@ -1,0 +1,4 @@
+# 指定环境的默认配置
+spring:
+  profiles:
+    active: dev
