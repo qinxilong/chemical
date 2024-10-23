@@ -40,6 +40,18 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-chemical</artifactId>
+            <version>3.8.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-chemical</artifactId>
+            <version>3.8.5</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
