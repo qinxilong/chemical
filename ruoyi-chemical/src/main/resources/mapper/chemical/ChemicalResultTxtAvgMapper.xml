@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chemical.mapper.ChemicalResultTxtAvgMapper">
+
+    <resultMap type="ChemicalResultTxtAvg" id="ChemicalResultTxtAvgResult">
+        <result property="id"    column="id" />
+        <result property="sample"    column="sample" />
+        <result property="operator"    column="operator" />
+        <result property="comment"    column="comment" />
+        <result property="groupA"    column="group_a" />
+        <result property="date"    column="date" />
+        <result property="tfe"    column="tfe" />
+        <result property="sio2"    column="sio2" />
+        <result property="cao"    column="cao" />
+        <result property="mgo"    column="mgo" />
+        <result property="a12o3"    column="a12o3" />
+        <result property="p"    column="p" />
+        <result property="s"    column="s" />
+        <result property="tio2"    column="tio2" />
+        <result property="v2o5"    column="v2o5" />
+        <result property="mno"    column="mno" />
+        <result property="cr"    column="cr" />
+        <result property="zn"    column="zn" />
+        <result property="cu"    column="cu" />
+        <result property="ni"    column="ni" />
+        <result property="pb"    column="pb" />
+        <result property="aS"    column="a_s" />
+        <result property="feo"    column="feo" />
+        <result property="h2o"    column="h2o" />
+        <result property="burnLoss"    column="burn_loss" />
+        <result property="granularity"    column="granularity" />
+        <result property="strength"    column="strength" />
+        <result property="rawFever"    column="raw_fever" />
+        <result property="createBy"    column="create_by" />
+        <result property="createTime"    column="create_time" />
+        <result property="updateBy"    column="update_by" />
+        <result property="updateTime"    column="update_time" />
+        <result property="remark"    column="remark" />
+    </resultMap>
+
+
+</mapper>

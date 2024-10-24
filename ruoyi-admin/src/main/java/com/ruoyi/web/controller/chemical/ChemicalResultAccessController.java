@@ -3,9 +3,6 @@ package com.ruoyi.web.controller.chemical;
 import java.util.List;
 import java.util.Arrays;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ruoyi.chemical.domain.ChemicalResultAccess;
-import com.ruoyi.chemical.service.IChemicalResultAccessService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +19,8 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.chemical.domain.ChemicalResultAccess;
+import com.ruoyi.chemical.service.IChemicalResultAccessService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -29,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * access实验数据Controller
  *
  * @author xy
- * @date 2024-10-23
+ * @date 2024-10-24
  */
 @Api(tags="access实验数据管理")
 @RestController

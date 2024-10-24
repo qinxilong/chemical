@@ -8,7 +8,7 @@ import com.ruoyi.chemical.domain.ChemicalResultAccess;
  * access实验数据Service接口
  *
  * @author xy
- * @date 2024-10-23
+ * @date 2024-10-24
  */
 public interface IChemicalResultAccessService extends IService<ChemicalResultAccess> {
 

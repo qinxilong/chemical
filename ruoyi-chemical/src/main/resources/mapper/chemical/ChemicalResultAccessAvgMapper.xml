@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.chemical.mapper.ChemicalResultAccessAvgMapper">
+
+    <resultMap type="ChemicalResultAccessAvg" id="ChemicalResultAccessAvgResult">
+        <result property="id"    column="id" />
+        <result property="sample"    column="sample" />
+        <result property="mad"    column="mad" />
+        <result property="aad"    column="aad" />
+        <result property="ad"    column="ad" />
+        <result property="vad"    column="vad" />
+        <result property="vd"    column="vd" />
+        <result property="vdaf"    column="vdaf" />
+        <result property="fcad"    column="fcad" />
+        <result property="sad"    column="sad" />
+        <result property="h2o"    column="h2o" />
+        <result property="qd"    column="qd" />
+        <result property="qn"    column="qn" />
+        <result property="zn"    column="zn" />
+        <result property="tfe"    column="tfe" />
+        <result property="c"    column="c" />
+        <result property="roomNo"    column="room_no" />
+        <result property="granularity"    column="granularity" />
+        <result property="grindAbility"    column="grind_ability" />
+        <result property="materialName"    column="material_name" />
+        <result property="createBy"    column="create_by" />
+        <result property="createTime"    column="create_time" />
+        <result property="updateBy"    column="update_by" />
+        <result property="updateTime"    column="update_time" />
+        <result property="remark"    column="remark" />
+        <result property="originIds"    column="origin_ids" />
+    </resultMap>
+
+
+</mapper>

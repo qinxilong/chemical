@@ -16,7 +16,7 @@ import com.ruoyi.chemical.service.IChemicalResultAccessService;
  * access实验数据Service业务层处理
  *
  * @author xy
- * @date 2024-10-23
+ * @date 2024-10-24
  */
 @Service
 public class ChemicalResultAccessServiceImpl extends ServiceImpl<ChemicalResultAccessMapper, ChemicalResultAccess> implements IChemicalResultAccessService {
@@ -56,11 +56,12 @@ public class ChemicalResultAccessServiceImpl extends ServiceImpl<ChemicalResultA
         lqw.eq(StringUtils.isNotBlank(query.getZn()), ChemicalResultAccess::getZn, query.getZn());
         lqw.eq(StringUtils.isNotBlank(query.getTfe()), ChemicalResultAccess::getTfe, query.getTfe());
         lqw.eq(StringUtils.isNotBlank(query.getC()), ChemicalResultAccess::getC, query.getC());
-        lqw.eq(query.getSampleNo() != null, ChemicalResultAccess::getSampleNo, query.getSampleNo());
         lqw.eq(query.getRoomNo() != null, ChemicalResultAccess::getRoomNo, query.getRoomNo());
         lqw.eq(StringUtils.isNotBlank(query.getGranularity()), ChemicalResultAccess::getGranularity, query.getGranularity());
         lqw.eq(StringUtils.isNotBlank(query.getGrindAbility()), ChemicalResultAccess::getGrindAbility, query.getGrindAbility());
         lqw.like(StringUtils.isNotBlank(query.getMaterialName()), ChemicalResultAccess::getMaterialName, query.getMaterialName());
+        lqw.orderByDesc(ChemicalResultAccess::getCreateTime);
+        lqw.eq(query.getPushStatus()>-1, ChemicalResultAccess::getPushStatus, query.getPushStatus());
         return lqw;
     }
 

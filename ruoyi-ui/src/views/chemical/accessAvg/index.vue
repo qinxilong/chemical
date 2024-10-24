@@ -17,16 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="推送状态" prop="pushStatus">
-        <el-select v-model="queryParams.pushStatus" placeholder="请选择推送状态" clearable>
-          <el-option
-            v-for="dict in dict.type.push_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -41,7 +31,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['chemical:chemicalAccess:add']"
+          v-hasPermi="['chemical:accessAvg:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -52,7 +42,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['chemical:chemicalAccess:edit']"
+          v-hasPermi="['chemical:accessAvg:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,7 +53,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['chemical:chemicalAccess:remove']"
+          v-hasPermi="['chemical:accessAvg:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -73,13 +63,13 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['chemical:chemicalAccess:export']"
+          v-hasPermi="['chemical:accessAvg:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="chemicalAccessList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="accessAvgList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID号" align="center" prop="id" />
       <el-table-column label="样品号" align="center" prop="sample" />
@@ -102,11 +92,7 @@
       <el-table-column label="可磨性" align="center" prop="grindAbility" />
       <el-table-column label="物料名称" align="center" prop="materialName" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="推送状态" align="center" prop="pushStatus">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.push_status" :value="scope.row.pushStatus"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="原始数据id" align="center" prop="originIds" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -114,14 +100,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['chemical:chemicalAccess:edit']"
+            v-hasPermi="['chemical:accessAvg:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['chemical:chemicalAccess:remove']"
+            v-hasPermi="['chemical:accessAvg:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -135,7 +121,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改access实验数据对话框 -->
+    <!-- 添加或修改access发送数据对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="样品号" prop="sample">
@@ -198,14 +184,8 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="推送状态" prop="pushStatus">
-          <el-radio-group v-model="form.pushStatus">
-            <el-radio
-              v-for="dict in dict.type.push_status"
-              :key="dict.value"
-              :label="parseInt(dict.value)"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
+        <el-form-item label="原始数据id" prop="originIds">
+          <el-input v-model="form.originIds" placeholder="请输入原始数据id" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -217,11 +197,10 @@
 </template>
 
 <script>
-import { listChemicalAccess, getChemicalAccess, delChemicalAccess, addChemicalAccess, updateChemicalAccess } from "@/api/chemical/chemicalAccess";
+import { listAccessAvg, getAccessAvg, delAccessAvg, addAccessAvg, updateAccessAvg } from "@/api/chemical/accessAvg";
 
 export default {
-  name: "ChemicalAccess",
-  dicts: ['push_status'],
+  name: "AccessAvg",
   data() {
     return {
       // 遮罩层
@@ -236,8 +215,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // access实验数据表格数据
-      chemicalAccessList: [],
+      // access发送数据表格数据
+      accessAvgList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -265,7 +244,7 @@ export default {
         granularity: null,
         grindAbility: null,
         materialName: null,
-        pushStatus: null
+        originIds: null
       },
       // 表单参数
       form: {},
@@ -284,11 +263,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询access实验数据列表 */
+    /** 查询access发送数据列表 */
     getList() {
       this.loading = true;
-      listChemicalAccess(this.queryParams).then(response => {
-        this.chemicalAccessList = response.rows;
+      listAccessAvg(this.queryParams).then(response => {
+        this.accessAvgList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -326,7 +305,7 @@ export default {
         updateBy: null,
         updateTime: null,
         remark: null,
-        pushStatus: null
+        originIds: null
       };
       this.resetForm("form");
     },
@@ -350,16 +329,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加access实验数据";
+      this.title = "添加access发送数据";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getChemicalAccess(id).then(response => {
+      getAccessAvg(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改access实验数据";
+        this.title = "修改access发送数据";
       });
     },
     /** 提交按钮 */
@@ -367,13 +346,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateChemicalAccess(this.form).then(response => {
+            updateAccessAvg(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addChemicalAccess(this.form).then(response => {
+            addAccessAvg(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -385,8 +364,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除access实验数据编号为"' + ids + '"的数据项？').then(function() {
-        return delChemicalAccess(ids);
+      this.$modal.confirm('是否确认删除access发送数据编号为"' + ids + '"的数据项？').then(function() {
+        return delAccessAvg(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -394,9 +373,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('chemical/chemicalAccess/export', {
+      this.download('chemical/accessAvg/export', {
         ...this.queryParams
-      }, `chemicalAccess_${new Date().getTime()}.xlsx`)
+      }, `accessAvg_${new Date().getTime()}.xlsx`)
     }
   }
 };

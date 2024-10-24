@@ -14,7 +14,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * access实验数据对象 chemical_result_access
+ * access发送数据对象 chemical_result_access_avg
  *
  * @author xy
  * @date 2024-10-24
@@ -23,9 +23,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 @ToString
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("chemical_result_access")
-@ApiModel(value = "ChemicalResultAccess", description = "access实验数据实体")
-public class ChemicalResultAccess extends BaseEntity
+@TableName("chemical_result_access_avg")
+@ApiModel(value = "ChemicalResultAccessAvg", description = "access发送数据实体")
+public class ChemicalResultAccessAvg extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -129,9 +129,9 @@ public class ChemicalResultAccess extends BaseEntity
     @ApiModelProperty("物料名称")
     private String materialName;
 
-    /** 推送状态 */
-    @Excel(name = "推送状态")
-    @ApiModelProperty("推送状态")
-    private int pushStatus;
+    /** 原始数据id */
+    @Excel(name = "原始数据id")
+    @ApiModelProperty("原始数据id")
+    private String originIds;
 
 }

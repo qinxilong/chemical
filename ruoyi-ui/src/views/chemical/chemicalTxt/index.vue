@@ -1,18 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="样品号" prop="sample">
+      <el-form-item label="Sample" prop="sample">
         <el-input
           v-model="queryParams.sample"
-          placeholder="请输入样品号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="物料名称" prop="materialName">
-        <el-input
-          v-model="queryParams.materialName"
-          placeholder="请输入物料名称"
+          placeholder="请输入Sample"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -41,7 +33,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['chemical:chemicalAccess:add']"
+          v-hasPermi="['chemical:chemicalTxt:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -52,7 +44,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['chemical:chemicalAccess:edit']"
+          v-hasPermi="['chemical:chemicalTxt:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,7 +55,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['chemical:chemicalAccess:remove']"
+          v-hasPermi="['chemical:chemicalTxt:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -73,34 +65,46 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['chemical:chemicalAccess:export']"
+          v-hasPermi="['chemical:chemicalTxt:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="chemicalAccessList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="chemicalTxtList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID号" align="center" prop="id" />
-      <el-table-column label="样品号" align="center" prop="sample" />
-      <el-table-column label="Mad" align="center" prop="mad" />
-      <el-table-column label="Aad" align="center" prop="aad" />
-      <el-table-column label="Ad" align="center" prop="ad" />
-      <el-table-column label="Vad" align="center" prop="vad" />
-      <el-table-column label="Vd" align="center" prop="vd" />
-      <el-table-column label="Vdaf" align="center" prop="vdaf" />
-      <el-table-column label="FCad" align="center" prop="fcad" />
-      <el-table-column label="Sad" align="center" prop="sad" />
-      <el-table-column label="H2O" align="center" prop="h2o" />
-      <el-table-column label="Qd" align="center" prop="qd" />
-      <el-table-column label="Qn" align="center" prop="qn" />
-      <el-table-column label="Zn" align="center" prop="zn" />
+      <el-table-column label="Sample" align="center" prop="sample" />
+      <el-table-column label="Operator" align="center" prop="operator" />
+      <el-table-column label="Comment" align="center" prop="comment" />
+      <el-table-column label="Group" align="center" prop="groupA" />
+      <el-table-column label="Date" align="center" prop="date" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.date, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="TFe" align="center" prop="tfe" />
-      <el-table-column label="C" align="center" prop="c" />
-      <el-table-column label="室编号" align="center" prop="roomNo" />
+      <el-table-column label="SiO2" align="center" prop="sio2" />
+      <el-table-column label="CaO" align="center" prop="cao" />
+      <el-table-column label="MgO" align="center" prop="mgo" />
+      <el-table-column label="A12O3" align="center" prop="a12o3" />
+      <el-table-column label="P" align="center" prop="p" />
+      <el-table-column label="S" align="center" prop="s" />
+      <el-table-column label="TiO2" align="center" prop="tio2" />
+      <el-table-column label="V2O5" align="center" prop="v2o5" />
+      <el-table-column label="MnO" align="center" prop="mno" />
+      <el-table-column label="Cr" align="center" prop="cr" />
+      <el-table-column label="Zn" align="center" prop="zn" />
+      <el-table-column label="Cu" align="center" prop="cu" />
+      <el-table-column label="Ni" align="center" prop="ni" />
+      <el-table-column label="Pb" align="center" prop="pb" />
+      <el-table-column label="As" align="center" prop="aS" />
+      <el-table-column label="Feo" align="center" prop="feo" />
+      <el-table-column label="H2O" align="center" prop="h2o" />
+      <el-table-column label="烧损" align="center" prop="burnLoss" />
       <el-table-column label="粒度" align="center" prop="granularity" />
-      <el-table-column label="可磨性" align="center" prop="grindAbility" />
-      <el-table-column label="物料名称" align="center" prop="materialName" />
+      <el-table-column label="强度" align="center" prop="strength" />
+      <el-table-column label="生烧" align="center" prop="rawFever" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="推送状态" align="center" prop="pushStatus">
         <template slot-scope="scope">
@@ -114,14 +118,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['chemical:chemicalAccess:edit']"
+            v-hasPermi="['chemical:chemicalTxt:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['chemical:chemicalAccess:remove']"
+            v-hasPermi="['chemical:chemicalTxt:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -135,65 +139,94 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改access实验数据对话框 -->
+    <!-- 添加或修改txt实验数据对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="样品号" prop="sample">
-          <el-input v-model="form.sample" placeholder="请输入样品号" />
+        <el-form-item label="Sample" prop="sample">
+          <el-input v-model="form.sample" placeholder="请输入Sample" />
         </el-form-item>
-        <el-form-item label="Mad" prop="mad">
-          <el-input v-model="form.mad" placeholder="请输入Mad" />
+        <el-form-item label="Operator" prop="operator">
+          <el-input v-model="form.operator" placeholder="请输入Operator" />
         </el-form-item>
-        <el-form-item label="Aad" prop="aad">
-          <el-input v-model="form.aad" placeholder="请输入Aad" />
+        <el-form-item label="Comment" prop="comment">
+          <el-input v-model="form.comment" placeholder="请输入Comment" />
         </el-form-item>
-        <el-form-item label="Ad" prop="ad">
-          <el-input v-model="form.ad" placeholder="请输入Ad" />
+        <el-form-item label="Group" prop="groupA">
+          <el-input v-model="form.groupA" placeholder="请输入Group" />
         </el-form-item>
-        <el-form-item label="Vad" prop="vad">
-          <el-input v-model="form.vad" placeholder="请输入Vad" />
-        </el-form-item>
-        <el-form-item label="Vd" prop="vd">
-          <el-input v-model="form.vd" placeholder="请输入Vd" />
-        </el-form-item>
-        <el-form-item label="Vdaf" prop="vdaf">
-          <el-input v-model="form.vdaf" placeholder="请输入Vdaf" />
-        </el-form-item>
-        <el-form-item label="FCad" prop="fcad">
-          <el-input v-model="form.fcad" placeholder="请输入FCad" />
-        </el-form-item>
-        <el-form-item label="Sad" prop="sad">
-          <el-input v-model="form.sad" placeholder="请输入Sad" />
-        </el-form-item>
-        <el-form-item label="H2O" prop="h2o">
-          <el-input v-model="form.h2o" placeholder="请输入H2O" />
-        </el-form-item>
-        <el-form-item label="Qd" prop="qd">
-          <el-input v-model="form.qd" placeholder="请输入Qd" />
-        </el-form-item>
-        <el-form-item label="Qn" prop="qn">
-          <el-input v-model="form.qn" placeholder="请输入Qn" />
-        </el-form-item>
-        <el-form-item label="Zn" prop="zn">
-          <el-input v-model="form.zn" placeholder="请输入Zn" />
+        <el-form-item label="Date" prop="date">
+          <el-date-picker clearable
+                          v-model="form.date"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择Date">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="TFe" prop="tfe">
           <el-input v-model="form.tfe" placeholder="请输入TFe" />
         </el-form-item>
-        <el-form-item label="C" prop="c">
-          <el-input v-model="form.c" placeholder="请输入C" />
+        <el-form-item label="SiO2" prop="sio2">
+          <el-input v-model="form.sio2" placeholder="请输入SiO2" />
         </el-form-item>
-        <el-form-item label="室编号" prop="roomNo">
-          <el-input v-model="form.roomNo" placeholder="请输入室编号" />
+        <el-form-item label="CaO" prop="cao">
+          <el-input v-model="form.cao" placeholder="请输入CaO" />
+        </el-form-item>
+        <el-form-item label="MgO" prop="mgo">
+          <el-input v-model="form.mgo" placeholder="请输入MgO" />
+        </el-form-item>
+        <el-form-item label="A12O3" prop="a12o3">
+          <el-input v-model="form.a12o3" placeholder="请输入A12O3" />
+        </el-form-item>
+        <el-form-item label="P" prop="p">
+          <el-input v-model="form.p" placeholder="请输入P" />
+        </el-form-item>
+        <el-form-item label="S" prop="s">
+          <el-input v-model="form.s" placeholder="请输入S" />
+        </el-form-item>
+        <el-form-item label="TiO2" prop="tio2">
+          <el-input v-model="form.tio2" placeholder="请输入TiO2" />
+        </el-form-item>
+        <el-form-item label="V2O5" prop="v2o5">
+          <el-input v-model="form.v2o5" placeholder="请输入V2O5" />
+        </el-form-item>
+        <el-form-item label="MnO" prop="mno">
+          <el-input v-model="form.mno" placeholder="请输入MnO" />
+        </el-form-item>
+        <el-form-item label="Cr" prop="cr">
+          <el-input v-model="form.cr" placeholder="请输入Cr" />
+        </el-form-item>
+        <el-form-item label="Zn" prop="zn">
+          <el-input v-model="form.zn" placeholder="请输入Zn" />
+        </el-form-item>
+        <el-form-item label="Cu" prop="cu">
+          <el-input v-model="form.cu" placeholder="请输入Cu" />
+        </el-form-item>
+        <el-form-item label="Ni" prop="ni">
+          <el-input v-model="form.ni" placeholder="请输入Ni" />
+        </el-form-item>
+        <el-form-item label="Pb" prop="pb">
+          <el-input v-model="form.pb" placeholder="请输入Pb" />
+        </el-form-item>
+        <el-form-item label="As" prop="aS">
+          <el-input v-model="form.aS" placeholder="请输入As" />
+        </el-form-item>
+        <el-form-item label="Feo" prop="feo">
+          <el-input v-model="form.feo" placeholder="请输入Feo" />
+        </el-form-item>
+        <el-form-item label="H2O" prop="h2o">
+          <el-input v-model="form.h2o" placeholder="请输入H2O" />
+        </el-form-item>
+        <el-form-item label="烧损" prop="burnLoss">
+          <el-input v-model="form.burnLoss" placeholder="请输入烧损" />
         </el-form-item>
         <el-form-item label="粒度" prop="granularity">
           <el-input v-model="form.granularity" placeholder="请输入粒度" />
         </el-form-item>
-        <el-form-item label="可磨性" prop="grindAbility">
-          <el-input v-model="form.grindAbility" placeholder="请输入可磨性" />
+        <el-form-item label="强度" prop="strength">
+          <el-input v-model="form.strength" placeholder="请输入强度" />
         </el-form-item>
-        <el-form-item label="物料名称" prop="materialName">
-          <el-input v-model="form.materialName" placeholder="请输入物料名称" />
+        <el-form-item label="生烧" prop="rawFever">
+          <el-input v-model="form.rawFever" placeholder="请输入生烧" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -217,10 +250,10 @@
 </template>
 
 <script>
-import { listChemicalAccess, getChemicalAccess, delChemicalAccess, addChemicalAccess, updateChemicalAccess } from "@/api/chemical/chemicalAccess";
+import { listChemicalTxt, getChemicalTxt, delChemicalTxt, addChemicalTxt, updateChemicalTxt } from "@/api/chemical/chemicalTxt";
 
 export default {
-  name: "ChemicalAccess",
+  name: "ChemicalTxt",
   dicts: ['push_status'],
   data() {
     return {
@@ -236,8 +269,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // access实验数据表格数据
-      chemicalAccessList: [],
+      // txt实验数据表格数据
+      chemicalTxtList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -247,35 +280,43 @@ export default {
         pageNum: 1,
         pageSize: 10,
         sample: null,
-        mad: null,
-        aad: null,
-        ad: null,
-        vad: null,
-        vd: null,
-        vdaf: null,
-        fcad: null,
-        sad: null,
-        h2o: null,
-        qd: null,
-        qn: null,
-        zn: null,
+        operator: null,
+        comment: null,
+        groupA: null,
+        date: null,
         tfe: null,
-        c: null,
-        roomNo: null,
+        sio2: null,
+        cao: null,
+        mgo: null,
+        a12o3: null,
+        p: null,
+        s: null,
+        tio2: null,
+        v2o5: null,
+        mno: null,
+        cr: null,
+        zn: null,
+        cu: null,
+        ni: null,
+        pb: null,
+        aS: null,
+        feo: null,
+        h2o: null,
+        burnLoss: null,
         granularity: null,
-        grindAbility: null,
-        materialName: null,
+        strength: null,
+        rawFever: null,
         pushStatus: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        granularity: [
-          { required: true, message: "粒度不能为空", trigger: "blur" }
+        sample: [
+          { required: true, message: "Sample不能为空", trigger: "blur" }
         ],
-        grindAbility: [
-          { required: true, message: "可磨性不能为空", trigger: "blur" }
+        operator: [
+          { required: true, message: "Operator不能为空", trigger: "blur" }
         ],
       }
     };
@@ -284,11 +325,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询access实验数据列表 */
+    /** 查询txt实验数据列表 */
     getList() {
       this.loading = true;
-      listChemicalAccess(this.queryParams).then(response => {
-        this.chemicalAccessList = response.rows;
+      listChemicalTxt(this.queryParams).then(response => {
+        this.chemicalTxtList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -303,24 +344,32 @@ export default {
       this.form = {
         id: null,
         sample: null,
-        mad: null,
-        aad: null,
-        ad: null,
-        vad: null,
-        vd: null,
-        vdaf: null,
-        fcad: null,
-        sad: null,
-        h2o: null,
-        qd: null,
-        qn: null,
-        zn: null,
+        operator: null,
+        comment: null,
+        groupA: null,
+        date: null,
         tfe: null,
-        c: null,
-        roomNo: null,
+        sio2: null,
+        cao: null,
+        mgo: null,
+        a12o3: null,
+        p: null,
+        s: null,
+        tio2: null,
+        v2o5: null,
+        mno: null,
+        cr: null,
+        zn: null,
+        cu: null,
+        ni: null,
+        pb: null,
+        aS: null,
+        feo: null,
+        h2o: null,
+        burnLoss: null,
         granularity: null,
-        grindAbility: null,
-        materialName: null,
+        strength: null,
+        rawFever: null,
         createBy: null,
         createTime: null,
         updateBy: null,
@@ -350,16 +399,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加access实验数据";
+      this.title = "添加txt实验数据";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getChemicalAccess(id).then(response => {
+      getChemicalTxt(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改access实验数据";
+        this.title = "修改txt实验数据";
       });
     },
     /** 提交按钮 */
@@ -367,13 +416,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateChemicalAccess(this.form).then(response => {
+            updateChemicalTxt(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addChemicalAccess(this.form).then(response => {
+            addChemicalTxt(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -385,8 +434,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除access实验数据编号为"' + ids + '"的数据项？').then(function() {
-        return delChemicalAccess(ids);
+      this.$modal.confirm('是否确认删除txt实验数据编号为"' + ids + '"的数据项？').then(function() {
+        return delChemicalTxt(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -394,9 +443,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('chemical/chemicalAccess/export', {
+      this.download('chemical/chemicalTxt/export', {
         ...this.queryParams
-      }, `chemicalAccess_${new Date().getTime()}.xlsx`)
+      }, `chemicalTxt_${new Date().getTime()}.xlsx`)
     }
   }
 };
