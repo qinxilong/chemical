@@ -83,6 +83,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID号" align="center" prop="id" />
       <el-table-column label="样品号" align="center" prop="sample" />
+      <el-table-column label="实验室名称" align="center" prop="laboratoryName" />
+      <el-table-column label="推送次数" align="center" prop="pushNum" />
       <el-table-column label="Mad" align="center" prop="mad" />
       <el-table-column label="Aad" align="center" prop="aad" />
       <el-table-column label="Ad" align="center" prop="ad" />

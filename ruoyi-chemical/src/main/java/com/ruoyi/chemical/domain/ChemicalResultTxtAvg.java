@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -24,6 +25,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 @Data
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @TableName("chemical_result_txt_avg")
 @ApiModel(value = "ChemicalResultTxtAvg", description = "TXT发送数据实体")
@@ -34,7 +36,7 @@ public class ChemicalResultTxtAvg extends BaseEntity
     /** ID号 */
     @TableId(type= IdType.AUTO)
     @ApiModelProperty("ID号")
-    private String id;
+    private Long id;
 
     /** Sample */
     @Excel(name = "Sample")
@@ -110,7 +112,7 @@ public class ChemicalResultTxtAvg extends BaseEntity
     /** MnO */
     @Excel(name = "MnO")
     @ApiModelProperty("MnO")
-    private Long mno;
+    private String mno;
 
     /** Cr */
     @Excel(name = "Cr")
@@ -172,4 +174,25 @@ public class ChemicalResultTxtAvg extends BaseEntity
     @ApiModelProperty("生烧")
     private String rawFever;
 
+
+    /** 实验室名称 */
+    @Excel(name = "实验室名称")
+    @ApiModelProperty("实验室名称")
+    private String laboratoryName;
+
+    /** 数据接收方用户ID */
+    @Excel(name = "数据接收方用户ID")
+    @ApiModelProperty("数据接收方用户ID")
+    private String userId;
+
+
+
+
+    public ChemicalResultTxtAvg(ChemicalResultTxt chemicalResultTxt) {
+        this.sample = chemicalResultTxt.getSample();
+        this.operator = chemicalResultTxt.getOperator();
+        this.comment = chemicalResultTxt.getComment();
+        this.groupA = chemicalResultTxt.getGroupA();
+        this.laboratoryName = chemicalResultTxt.getLaboratoryName();
+    }
 }

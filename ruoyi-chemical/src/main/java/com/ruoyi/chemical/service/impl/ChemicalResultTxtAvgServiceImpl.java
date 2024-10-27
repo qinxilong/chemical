@@ -68,6 +68,8 @@ public class ChemicalResultTxtAvgServiceImpl extends ServiceImpl<ChemicalResultT
         lqw.eq(StringUtils.isNotBlank(query.getGranularity()), ChemicalResultTxtAvg::getGranularity, query.getGranularity());
         lqw.eq(StringUtils.isNotBlank(query.getStrength()), ChemicalResultTxtAvg::getStrength, query.getStrength());
         lqw.eq(StringUtils.isNotBlank(query.getRawFever()), ChemicalResultTxtAvg::getRawFever, query.getRawFever());
+        lqw.like(StringUtils.isNotBlank(query.getLaboratoryName()), ChemicalResultTxtAvg::getLaboratoryName, query.getLaboratoryName());
+        lqw.eq(StringUtils.isNotBlank(query.getUserId()), ChemicalResultTxtAvg::getUserId, query.getUserId());
         lqw.orderByDesc(ChemicalResultTxtAvg::getCreateTime);
         return lqw;
     }

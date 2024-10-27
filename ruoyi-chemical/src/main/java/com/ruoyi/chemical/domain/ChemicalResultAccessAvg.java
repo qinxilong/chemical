@@ -32,7 +32,7 @@ public class ChemicalResultAccessAvg extends BaseEntity
     /** ID号 */
     @TableId(type= IdType.AUTO)
     @ApiModelProperty("ID号")
-    private String id;
+    private Long id;
 
     /** 样品号 */
     @Excel(name = "样品号")

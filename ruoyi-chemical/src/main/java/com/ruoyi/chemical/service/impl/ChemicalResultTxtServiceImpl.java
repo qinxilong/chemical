@@ -70,6 +70,9 @@ public class ChemicalResultTxtServiceImpl extends ServiceImpl<ChemicalResultTxtM
         lqw.eq(StringUtils.isNotBlank(query.getRawFever()), ChemicalResultTxt::getRawFever, query.getRawFever());
         lqw.orderByDesc(ChemicalResultTxt::getCreateTime);
         lqw.eq(query.getPushStatus() >-1, ChemicalResultTxt::getPushStatus, query.getPushStatus());
+        lqw.eq(query.getPushNum() != null, ChemicalResultTxt::getPushNum, query.getPushNum());
+        lqw.like(StringUtils.isNotBlank(query.getLaboratoryName()), ChemicalResultTxt::getLaboratoryName, query.getLaboratoryName());
+
         return lqw;
     }
 

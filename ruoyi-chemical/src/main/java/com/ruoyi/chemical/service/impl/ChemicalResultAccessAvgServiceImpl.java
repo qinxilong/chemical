@@ -62,6 +62,7 @@ public class ChemicalResultAccessAvgServiceImpl extends ServiceImpl<ChemicalResu
         lqw.like(StringUtils.isNotBlank(query.getMaterialName()), ChemicalResultAccessAvg::getMaterialName, query.getMaterialName());
         lqw.orderByDesc(ChemicalResultAccessAvg::getCreateTime);
         lqw.eq(StringUtils.isNotBlank(query.getOriginIds()), ChemicalResultAccessAvg::getOriginIds, query.getOriginIds());
+
         return lqw;
     }
 

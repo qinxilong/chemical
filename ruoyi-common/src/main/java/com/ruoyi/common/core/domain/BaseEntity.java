@@ -6,19 +6,29 @@ import java.util.HashMap;
 import java.util.Map;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Entity基类
  *
  * @author ruoyi
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
+
+    @TableLogic
+    private Integer deleted;
 
     /** 搜索值 */
     @TableField(exist = false)

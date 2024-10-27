@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.chemical.mapper.ChemicalResultAccessMapper">
 
     <resultMap type="ChemicalResultAccess" id="ChemicalResultAccessResult">
@@ -21,11 +21,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="zn"    column="zn" />
         <result property="tfe"    column="tfe" />
         <result property="c"    column="c" />
-        <result property="sampleNo"    column="sample_no" />
         <result property="roomNo"    column="room_no" />
         <result property="granularity"    column="granularity" />
         <result property="grindAbility"    column="grind_ability" />
         <result property="materialName"    column="material_name" />
+        <result property="createBy"    column="create_by" />
+        <result property="createTime"    column="create_time" />
+        <result property="updateBy"    column="update_by" />
+        <result property="updateTime"    column="update_time" />
+        <result property="remark"    column="remark" />
+        <result property="pushStatus"    column="push_status" />
+        <result property="laboratoryName"    column="laboratory_name" />
+        <result property="pushNum"    column="push_num" />
+        <result property="deleted"    column="deleted" />
     </resultMap>
 
 

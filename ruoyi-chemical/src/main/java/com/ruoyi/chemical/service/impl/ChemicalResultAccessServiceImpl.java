@@ -62,6 +62,8 @@ public class ChemicalResultAccessServiceImpl extends ServiceImpl<ChemicalResultA
         lqw.like(StringUtils.isNotBlank(query.getMaterialName()), ChemicalResultAccess::getMaterialName, query.getMaterialName());
         lqw.orderByDesc(ChemicalResultAccess::getCreateTime);
         lqw.eq(query.getPushStatus()>-1, ChemicalResultAccess::getPushStatus, query.getPushStatus());
+        lqw.like(StringUtils.isNotBlank(query.getLaboratoryName()), ChemicalResultAccess::getLaboratoryName, query.getLaboratoryName());
+        lqw.eq(query.getPushNum() != null, ChemicalResultAccess::getPushNum, query.getPushNum());
         return lqw;
     }
 

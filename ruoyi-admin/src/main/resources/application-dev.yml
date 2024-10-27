@@ -18,7 +18,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8080
+  port: 32001
   servlet:
     # 应用的访问路径
     context-path: /
@@ -174,8 +174,8 @@ mybatis-plus:
       # 主键类型
       # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID
       idType: AUTO
-      logic-delete-field: delFlag # 全局逻辑删除的实体字段名
-      logic-delete-value: 2 # 逻辑已删除值(默认为 1)
+      logic-delete-field: deleted # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 # PageHelper分页插件

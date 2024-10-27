@@ -9,6 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="实验室名称" prop="laboratoryName">
+        <el-input
+          v-model="queryParams.laboratoryName"
+          placeholder="请输入实验室名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="推送状态" prop="pushStatus">
         <el-select v-model="queryParams.pushStatus" placeholder="请选择推送状态" clearable>
           <el-option
@@ -68,16 +76,32 @@
           v-hasPermi="['chemical:chemicalTxt:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['chemical:chemicalTxt:push']"
+        >发送</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="chemicalTxtList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID号" align="center" prop="id" />
+<!--      <el-table-column label="ID号" align="center" prop="id" />-->
       <el-table-column label="Sample" align="center" prop="sample" />
+      <el-table-column label="实验室名称" align="center" prop="laboratoryName" />
       <el-table-column label="Operator" align="center" prop="operator" />
       <el-table-column label="Comment" align="center" prop="comment" />
       <el-table-column label="Group" align="center" prop="groupA" />
+      <el-table-column label="烧损" align="center" prop="burnLoss" />
+      <el-table-column label="粒度" align="center" prop="granularity" />
+      <el-table-column label="强度" align="center" prop="strength" />
+      <el-table-column label="生烧" align="center" prop="rawFever" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="Date" align="center" prop="date" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.date, '{y}-{m}-{d}') }}</span>
@@ -98,14 +122,9 @@
       <el-table-column label="Cu" align="center" prop="cu" />
       <el-table-column label="Ni" align="center" prop="ni" />
       <el-table-column label="Pb" align="center" prop="pb" />
-      <el-table-column label="As" align="center" prop="aS" />
+      <el-table-column label="As" align="center" prop="as" />
       <el-table-column label="Feo" align="center" prop="feo" />
       <el-table-column label="H2O" align="center" prop="h2o" />
-      <el-table-column label="烧损" align="center" prop="burnLoss" />
-      <el-table-column label="粒度" align="center" prop="granularity" />
-      <el-table-column label="强度" align="center" prop="strength" />
-      <el-table-column label="生烧" align="center" prop="rawFever" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="推送状态" align="center" prop="pushStatus">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.push_status" :value="scope.row.pushStatus"/>

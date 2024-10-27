@@ -1,9 +1,9 @@
 package com.ruoyi.chemical.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,6 +12,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * access实验数据对象 chemical_result_access
@@ -25,14 +28,14 @@ import com.ruoyi.common.core.domain.BaseEntity;
 @Accessors(chain = true)
 @TableName("chemical_result_access")
 @ApiModel(value = "ChemicalResultAccess", description = "access实验数据实体")
-public class ChemicalResultAccess extends BaseEntity
+public class ChemicalResultAccess
 {
     private static final long serialVersionUID = 1L;
 
     /** ID号 */
     @TableId(type= IdType.AUTO)
     @ApiModelProperty("ID号")
-    private String id;
+    private Long id;
 
     /** 样品号 */
     @Excel(name = "样品号")
@@ -133,5 +136,53 @@ public class ChemicalResultAccess extends BaseEntity
     @Excel(name = "推送状态")
     @ApiModelProperty("推送状态")
     private int pushStatus;
+    /** 实验室名称 */
+    @Excel(name = "实验室名称")
+    @ApiModelProperty("实验室名称")
+    private String laboratoryName;
+
+    /** 推送次数 */
+    @Excel(name = "推送次数")
+    @ApiModelProperty("推送次数")
+    private Long pushNum;
+
+    @TableLogic
+    private Integer deleted;
+
+    /** 搜索值 */
+    @TableField(exist = false)
+    @JsonIgnore
+    private String searchValue;
+
+    /** 创建者 */
+    @TableField(fill = FieldFill.INSERT)
+    @ApiModelProperty("创建者")
+    private String createBy;
+
+    /** 创建时间 */
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("创建时间")
+    private Date createTime;
+
+    /** 更新者 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty("更新者")
+    private String updateBy;
+
+    /** 更新时间 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("更新时间")
+    private Date updateTime;
+
+    /** 备注 */
+    @ApiModelProperty("备注")
+    private String remark;
+
+    /** 请求参数 */
+    @TableField(exist = false)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, Object> params;
 
 }

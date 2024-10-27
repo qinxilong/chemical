@@ -39,6 +39,9 @@
         <result property="updateTime"    column="update_time" />
         <result property="remark"    column="remark" />
         <result property="pushStatus"    column="push_status" />
+        <result property="laboratoryName"    column="laboratory_name" />
+        <result property="pushNum"    column="push_num" />
+        <result property="deleted"    column="deleted" />
     </resultMap>
 
 

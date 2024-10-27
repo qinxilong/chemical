@@ -1,19 +1,22 @@
 package com.ruoyi.chemical.domain;
 
 import java.util.Date;
+import java.util.Map;
+
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.springframework.stereotype.Component;
 
 /**
  * txt实验数据对象 chemical_result_txt
@@ -21,20 +24,22 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author xy
  * @date 2024-10-24
  */
+@Component
 @Data
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @TableName("chemical_result_txt")
 @ApiModel(value = "ChemicalResultTxt", description = "txt实验数据实体")
-public class ChemicalResultTxt extends BaseEntity
+public class ChemicalResultTxt
 {
     private static final long serialVersionUID = 1L;
 
     /** ID号 */
-    @TableId(type= IdType.AUTO)
+    @TableId(value="id",type= IdType.AUTO)
     @ApiModelProperty("ID号")
-    private String id;
+    private Long id;
 
     /** Sample */
     @Excel(name = "Sample")
@@ -110,7 +115,7 @@ public class ChemicalResultTxt extends BaseEntity
     /** MnO */
     @Excel(name = "MnO")
     @ApiModelProperty("MnO")
-    private Long mno;
+    private String mno;
 
     /** Cr */
     @Excel(name = "Cr")
@@ -175,6 +180,53 @@ public class ChemicalResultTxt extends BaseEntity
     /** 推送状态 */
     @Excel(name = "推送状态")
     @ApiModelProperty("推送状态")
-    private int pushStatus;
+    private int pushStatus= 0;
 
+    @TableLogic
+    private Integer deleted;
+
+    /** 实验室名称 */
+    @Excel(name = "实验室名称")
+    @ApiModelProperty("实验室名称")
+    private String laboratoryName;
+
+    /** 推送次数 */
+    @Excel(name = "推送次数")
+    @ApiModelProperty("推送次数")
+    private Long pushNum;
+
+    /** 搜索值 */
+    @TableField(exist = false)
+    @JsonIgnore
+    private String searchValue;
+
+    /** 创建者 */
+    @ApiModelProperty("创建者")
+    private String createBy;
+
+    /** 创建时间 */
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("创建时间")
+    private Date createTime;
+
+    /** 更新者 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty("更新者")
+    private String updateBy;
+
+    /** 更新时间 */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("更新时间")
+    private Date updateTime;
+
+    /** 备注 */
+    @ApiModelProperty("备注")
+    private String remark;
+
+    /** 请求参数 */
+    @TableField(exist = false)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, Object> params;
 }

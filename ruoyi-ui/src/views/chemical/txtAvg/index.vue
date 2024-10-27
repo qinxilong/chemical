@@ -72,13 +72,15 @@
     <el-table v-loading="loading" :data="txtAvgList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID号" align="center" prop="id" />
+      <el-table-column label="实验室名称" align="center" prop="laboratoryName" />
       <el-table-column label="Sample" align="center" prop="sample" />
+      <el-table-column label="接收方用户" align="center" prop="userId" />
       <el-table-column label="Operator" align="center" prop="operator" />
       <el-table-column label="Comment" align="center" prop="comment" />
       <el-table-column label="Group" align="center" prop="groupA" />
-      <el-table-column label="Date" align="center" prop="date" width="180">
+      <el-table-column label="接收时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.date, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="TFe" align="center" prop="tfe" />
