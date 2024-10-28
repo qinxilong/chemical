@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -93,6 +92,7 @@ public class ChemicalResultServiceImpl  implements IChemicalResultService {
         List<String> orginIdList= chemicalResultPushRequest.getOrginIdList();
 
         List<ChemicalResultTxt> chemicalResultTxtList = new ArrayList<>();
+        List<ChemicalResultAccess> chemicalResultAccessList = new ArrayList<>();
 
         List<ChemicalResultPushRecord> pushRecordList = new ArrayList<>();
 
@@ -118,9 +118,95 @@ public class ChemicalResultServiceImpl  implements IChemicalResultService {
                }
             );
         }else{//access类型数据
-
+            //获取原始数据
+            orginIdList.forEach(orginId ->{
+                        ChemicalResultAccess chemicalResultAccess = chemicalResultAccessService.getById(orginId);
+                        chemicalResultAccessList.add(chemicalResultAccess);
+                    }
+            );
+            //计算平均数据
+            ChemicalResultAccessAvg  accessAvg = getChemicalResultAccessAvg(chemicalResultAccessList);
+            //每个用户发一次平均数据
+            receiveUserIdList.forEach(receiveUserId ->{
+                        ChemicalResultPushRecord pushRecord = new ChemicalResultPushRecord(chemicalResultPushRequest);
+                        accessAvg.setUserId(receiveUserId);
+                        String txtAvgId = saveChemicalResultAccessAvg(accessAvg);//保存到ChemicalResultTxtAvg
+                        accessAvg.setId(0L);
+                        pushRecord.setTargetId(txtAvgId);
+                        pushRecord.setReceiveUserId(receiveUserId);
+                        chemicalResultPushRecordService.save(pushRecord);//发放记录
+                    }
+            );
         }
         return 0;
+    }
+
+    private String saveChemicalResultAccessAvg(ChemicalResultAccessAvg accessAvg) {
+        chemicalResultAccessAvgService.save(accessAvg);
+        return  String.valueOf(accessAvg.getId());
+    }
+
+    private ChemicalResultAccessAvg getChemicalResultAccessAvg(List<ChemicalResultAccess> chemicalResultAccessList) {
+        ChemicalResultAccessAvg chemicalResultAccessAvg = new ChemicalResultAccessAvg();
+        if(!chemicalResultAccessList.isEmpty()){
+            chemicalResultAccessAvg = new ChemicalResultAccessAvg(chemicalResultAccessList.get(0));
+        }else {
+            return chemicalResultAccessAvg;
+        }
+        // 计算平均值的函数
+        BiFunction<List<ChemicalResultAccess>, Function<ChemicalResultAccess, String>, Double> calculateAverage = (list, getter) ->
+                list.stream()
+                        .map(getter)
+                        .filter(value -> !value.equals("-"))
+                        .mapToDouble(Double::parseDouble)
+                        .average()
+                        .orElse(0);
+
+        // 使用函数计算各个元素的平均值
+        double avgMad = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getMad);
+        double avgAad = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getAad);
+        double avgAd = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getAd);
+        double avgVad = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getVad);
+        double avgVd = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getVd);
+        double avgVdaf = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getVdaf);
+        double avgFcad = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getFcad);
+        double avgSad = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getSad);
+        double avgH2o = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getH2o);
+        double avgQd = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getQd);
+        double avgQn = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getQn);
+        double avgZn = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getZn);
+        double avgTFe = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getTfe);
+        double avgC = calculateAverage.apply(chemicalResultAccessList, ChemicalResultAccess::getC);
+        // 输出结果
+        System.out.println("Average avgMad: " + avgMad);
+        chemicalResultAccessAvg.setMad(String.valueOf(avgMad));
+        System.out.println("Average avgAad: " + avgAad);
+        chemicalResultAccessAvg.setAad(String.valueOf(avgAad));
+        System.out.println("Average avgAd: " + avgAd);
+        chemicalResultAccessAvg.setAd(String.valueOf(avgAd));
+        System.out.println("Average avgVad: " + avgVad);
+        chemicalResultAccessAvg.setVad(String.valueOf(avgVad));
+        System.out.println("Average avgVd: " + avgVd);
+        chemicalResultAccessAvg.setVd(String.valueOf(avgVd));
+        System.out.println("Average avgVdaf: " + avgVdaf);
+        chemicalResultAccessAvg.setVdaf(String.valueOf(avgVdaf));
+        System.out.println("Average avgFcad: " + avgFcad);
+        chemicalResultAccessAvg.setFcad(String.valueOf(avgFcad));
+        System.out.println("Average avgSad: " + avgSad);
+        chemicalResultAccessAvg.setSad(String.valueOf(avgSad));
+        System.out.println("Average avgH2o: " + avgH2o);
+        chemicalResultAccessAvg.setH2o(String.valueOf(avgH2o));
+        System.out.println("Average avgQd: " + avgQd);
+        chemicalResultAccessAvg.setQd(String.valueOf(avgQd));
+        System.out.println("Average avgQn: " + avgQn);
+        chemicalResultAccessAvg.setQn(String.valueOf(avgQn));
+        System.out.println("Average Zn: " + avgZn);
+        chemicalResultAccessAvg.setZn(String.valueOf(avgZn));
+        System.out.println("Average avgTFe: " + avgTFe);
+        chemicalResultAccessAvg.setTfe(String.valueOf(avgTFe));
+        System.out.println("Average avgC: " + avgC);
+        chemicalResultAccessAvg.setC(String.valueOf(avgC));
+        return chemicalResultAccessAvg;
     }
 
     private String  saveChemicalResultTxtAvg(ChemicalResultTxtAvg txtAvg) {
@@ -131,7 +217,7 @@ public class ChemicalResultServiceImpl  implements IChemicalResultService {
 
     private ChemicalResultTxtAvg getChemicalResultTxtAvg(List<ChemicalResultTxt> results) {
         ChemicalResultTxtAvg chemicalResultTxtAvg = new ChemicalResultTxtAvg();
-        if(results.size()>0){
+        if(!results.isEmpty()){
             chemicalResultTxtAvg = new ChemicalResultTxtAvg(results.get(0));
         }else {
             return chemicalResultTxtAvg;

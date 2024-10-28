@@ -134,4 +134,17 @@ public class ChemicalResultAccessAvg extends BaseEntity
     @ApiModelProperty("原始数据id")
     private String originIds;
 
+    /** 实验室名称 */
+    @Excel(name = "实验室名称")
+    @ApiModelProperty("实验室名称")
+    private String laboratoryName;
+
+    /** 数据接收方用户ID */
+    @Excel(name = "数据接收方用户ID")
+    @ApiModelProperty("数据接收方用户ID")
+    private String userId;
+
+
+    public ChemicalResultAccessAvg(ChemicalResultAccess chemicalResultAccess) {
+    }
 }

@@ -68,10 +68,6 @@ public class ChemicalController extends BaseController
         return toAjax(chemicalResultService.pushAccessResult(pushAccessResult));
     }
 
-
-
-
-
     /**
      * 发送TXT数据
      */
