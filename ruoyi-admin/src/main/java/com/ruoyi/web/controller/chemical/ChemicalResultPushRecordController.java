@@ -176,31 +176,33 @@ public class ChemicalResultPushRecordController extends BaseController
     @Log(title = "实验数据推送记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     @Transactional
-    public AjaxResult remove(@PathVariable String[] ids)
+    public AjaxResult remove(@PathVariable Long[] ids)
     {
         //删除目标数据
         if(ids.length==0){
             return toAjax(false);
         }
-        List<String> accessAvgList = new ArrayList<>();
-        List<String> txtAvgList = new ArrayList<>();
+        List<Long> accessAvgList = new ArrayList<>();
+        List<Long> txtAvgList = new ArrayList<>();
 
         List<ChemicalResultPushRecord> pushRecordList = chemicalResultPushRecordService.getByIds(ids);
         pushRecordList.stream().forEach(
                 pushRecord->{
                     if("txt".equalsIgnoreCase(pushRecord.getType())){
-                        txtAvgList.add(pushRecord.getTargetId());
+                        txtAvgList.add(Long.valueOf(pushRecord.getTargetId()));
                     }else{
-                        accessAvgList.add(pushRecord.getTargetId());
+                        accessAvgList.add(Long.valueOf(pushRecord.getTargetId()));
                     }
                 }
         );
-        if(txtAvgList.size()>0){
-            chemicalResultAccessAvgService.removeBatchByIds(txtAvgList);
+        if(!txtAvgList.isEmpty()){
+            chemicalResultTxtAvgService.removeByIds(txtAvgList);
+//            chemicalResultTxtAvgService.removeBatchByIds(txtAvgList);
         }
-        if(accessAvgList.size()>0){
-            chemicalResultTxtAvgService.removeBatchByIds(accessAvgList);
+        if(!accessAvgList.isEmpty()){
+            chemicalResultAccessAvgService.removeByIds(accessAvgList);
         }
+
         return toAjax(chemicalResultPushRecordService.removeByIds(Arrays.asList(ids)));
     }
     

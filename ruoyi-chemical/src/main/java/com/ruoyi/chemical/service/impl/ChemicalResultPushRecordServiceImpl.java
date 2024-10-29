@@ -44,7 +44,7 @@ public class ChemicalResultPushRecordServiceImpl extends ServiceImpl<ChemicalRes
     }
 
     @Override
-    public List<ChemicalResultPushRecord> getByIds(String[] ids) {
+    public List<ChemicalResultPushRecord> getByIds(Long[] ids) {
         LambdaQueryWrapper<ChemicalResultPushRecord> lqw = Wrappers.lambdaQuery();
         lqw.in(ids.length>0,ChemicalResultPushRecord::getId,ids);
         List<ChemicalResultPushRecord> chemicalResultPushRecordList = chemicalResultPushRecordMapper.selectList(lqw);

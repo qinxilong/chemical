@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * @author ruoyi
  */
 @Component
-@ServerEndpoint("/websocket/message/listen")
+@ServerEndpoint("/websocket/message")
 public class WebSocketServer
 {
     /**

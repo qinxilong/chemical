@@ -22,5 +22,5 @@ public interface IChemicalResultPushRecordService extends IService<ChemicalResul
 
     ChemicalResultPushRecord selectPushRecordWithUserNames(String id);
 
-    List<ChemicalResultPushRecord> getByIds(String[] ids);
+    List<ChemicalResultPushRecord> getByIds(Long[] ids);
 }
